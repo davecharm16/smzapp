@@ -3,62 +3,72 @@ import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import { DataGrid, GridActionsCellItem, GridCellParams, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { deleteProduct, fetchProducts } from '@/utils';
-// import DeleteCell from '@/components/DeleteCell';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-
-
-const columns: GridColDef[] = [
-  { 
-    field: 'id', 
-    headerName: 'ID', 
-    width: 90 
-  },
-  {
-    field: 'title',
-    headerName: 'Product Name',
-    flex:1,
-  },
-  {
-    field: 'description',
-    headerName: 'Product Description',
-    flex:1,
-  },
-  {
-    field: 'price',
-    headerName: 'Price',
-    type: 'number',
-    flex:1,
-  },
-  {
-    field: 'stock',
-    headerName: 'Stock',
-    type: 'number',
-    flex:1,
-  },
-  {
-    field: 'actions',
-    type: 'actions',
-    width: 80,
-    getActions: (params:any) => [
-      <GridActionsCellItem
-        icon={<DeleteIcon />}
-        label="Delete"
-        onClick={
-          ()=> {
-            deleteProduct(params.id)
-        }
-      }
-      />,
-    ]
-  }
-];
-
+import { Product } from '@/types';
+import AddForm from '@/components/AddForm';
 
 
 const Dashboard = () => {
 
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [newProduct, setNewProduct] = useState({});
+
+  const filterProduct = (productArray: Product[], pro_id: number) => {
+    setProducts(productArray.filter((product) => product.id !== pro_id));
+  };
+
+  const addProduct = () => {
+    
+  }
+
+  const columns: GridColDef[] = [
+    { 
+      field: 'id', 
+      headerName: 'ID', 
+      width: 90 
+    },
+    {
+      field: 'title',
+      headerName: 'Product Name',
+      flex:1,
+    },
+    {
+      field: 'description',
+      headerName: 'Product Description',
+      flex:1,
+    },
+    {
+      field: 'price',
+      headerName: 'Price',
+      type: 'number',
+      flex:1,
+    },
+    {
+      field: 'stock',
+      headerName: 'Stock',
+      type: 'number',
+      flex:1,
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      width: 80,
+      getActions: (params:any) => [
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Delete"
+          onClick={
+            async ()=> {
+              const result = await deleteProduct(params.id);
+              if (result.isDeleted == true) {
+                filterProduct(products, params.id);
+              }
+            }
+          }
+        />,
+      ]
+    }
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +90,7 @@ const Dashboard = () => {
 
   return (
     <div className='flex min-w-full min-h-screen justify-center p-6 flex-col items-center'>
-      {/* <DeleteCell/> */}
+      <AddForm />
       <Box sx={{ height: 600, width: '100%' , maxWidth: '1000px'}}>
       <DataGrid
         rows={products}

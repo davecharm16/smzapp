@@ -1,5 +1,6 @@
+
 export async function fetchProducts(){
-  const url = "https://dummyjson.com/products?limit=100";
+  const url = "https://dummyjson.com/products?limit=50";
 
   const response = await fetch(url);
 
