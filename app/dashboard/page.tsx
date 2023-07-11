@@ -1,11 +1,19 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { fetchProducts } from '@/utils';
+import { DataGrid, GridActionsCellItem, GridCellParams, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { deleteProduct, fetchProducts } from '@/utils';
+// import DeleteCell from '@/components/DeleteCell';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+
 
 const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 90 },
+  { 
+    field: 'id', 
+    headerName: 'ID', 
+    width: 90 
+  },
   {
     field: 'title',
     headerName: 'Product Name',
@@ -28,6 +36,22 @@ const columns: GridColDef[] = [
     type: 'number',
     flex:1,
   },
+  {
+    field: 'actions',
+    type: 'actions',
+    width: 80,
+    getActions: (params:any) => [
+      <GridActionsCellItem
+        icon={<DeleteIcon />}
+        label="Delete"
+        onClick={
+          ()=> {
+            deleteProduct(params.id)
+        }
+      }
+      />,
+    ]
+  }
 ];
 
 
@@ -55,20 +79,20 @@ const Dashboard = () => {
   
 
   return (
-    <div className='flex min-w-full min-h-screen justify-center p-6'>
-      <Box sx={{ height: 400, width: '100%' , maxWidth: '1000px'}}>
+    <div className='flex min-w-full min-h-screen justify-center p-6 flex-col items-center'>
+      {/* <DeleteCell/> */}
+      <Box sx={{ height: 600, width: '100%' , maxWidth: '1000px'}}>
       <DataGrid
         rows={products}
         columns={columns}
         initialState={{
           pagination: {
             paginationModel: {
-              pageSize: 5,
+              pageSize: 30,
             },
           },
         }}
           pageSizeOptions={[5]}
-          checkboxSelection
           disableRowSelectionOnClick
         />
       </Box>
