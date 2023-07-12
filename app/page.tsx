@@ -14,7 +14,7 @@ export default function Home() {
   const { data: session, status } = useSession()
 
   if(status === "authenticated"){
-    redirect('dashboard')
+    redirect('/dashboard')
   }
 
   const handleSubmit = async (e:FormEvent<HTMLFormElement>) => {
