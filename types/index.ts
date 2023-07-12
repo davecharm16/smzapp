@@ -1,4 +1,4 @@
-import { MouseEventHandler } from "react";
+import { Dispatch, MouseEventHandler, SetStateAction } from "react";
 
 export interface CustomButtonProps {
   title : string;
@@ -9,7 +9,7 @@ export interface CustomButtonProps {
 
 
 export interface Product {
-  id: number,
+  id?: number,
   title: string,
   description?: string,
   price: number,
@@ -19,6 +19,20 @@ export interface Product {
   brand?: string,
 }
 
+export interface User {
+  "username": string,
+  "email": string,
+  "firstName": string,
+  "lastName": string,
+  "gender": string,
+  "image": string,
+  "token": string,
+}
+
+
+export interface AddFormProps {
+  addProduct  : (prod:Product)=> void;
+}
 // export type BooleanClickHandler = (isOpen : boolean) => void
 
 // export interface AlertDialogProps {

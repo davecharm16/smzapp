@@ -1,6 +1,9 @@
+import { Product } from "@/types";
+
+const host = "https://dummyjson.com"
 
 export async function fetchProducts(){
-  const url = "https://dummyjson.com/products?limit=50";
+  const url = host+ "/products?limit=8";
 
   const response = await fetch(url);
 
@@ -13,7 +16,7 @@ export async function fetchProducts(){
 
 
 export async function deleteProduct(id:number){
-  const url = `https://dummyjson.com/products/${id}`
+  const url = host+`/products/${id}`
   console.log(id);
   const response = await fetch(url, {
     method: 'DELETE',
@@ -25,4 +28,20 @@ export async function deleteProduct(id:number){
   }
 
   return response.json();
+}
+
+export async function addNewProduct(product:Product):Promise<Product>{
+  const url = host+"/products/add";
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(product)
+  })
+
+  if(!response.ok){
+    throw new Error('Failed to Add Data');
+  }
+
+  return(response.json())
 }

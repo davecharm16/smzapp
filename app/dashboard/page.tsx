@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import { DataGrid, GridActionsCellItem, GridCellParams, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { deleteProduct, fetchProducts } from '@/utils';
+import { addNewProduct, deleteProduct, fetchProducts } from '@/utils';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Product } from '@/types';
 import AddForm from '@/components/AddForm';
@@ -10,15 +10,21 @@ import AddForm from '@/components/AddForm';
 
 const Dashboard = () => {
 
+
   const [products, setProducts] = useState<Product[]>([]);
-  const [newProduct, setNewProduct] = useState({});
 
   const filterProduct = (productArray: Product[], pro_id: number) => {
     setProducts(productArray.filter((product) => product.id !== pro_id));
   };
 
-  const addProduct = () => {
-    
+  const addProduct = async (prod:Product) => {
+    try {
+      const res = await addNewProduct(prod);
+      setProducts(prev => ([...prev,res]))
+    }
+    catch (e){
+      console.log(e);
+    }
   }
 
   const columns: GridColDef[] = [
@@ -59,16 +65,18 @@ const Dashboard = () => {
           label="Delete"
           onClick={
             async ()=> {
+              filterProduct(products, params.id);
               const result = await deleteProduct(params.id);
-              if (result.isDeleted == true) {
-                filterProduct(products, params.id);
-              }
+              // if (result.isDeleted == true) {
+              console.log(params.id)
+              // }
             }
           }
         />,
       ]
     }
   ];
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,7 +98,7 @@ const Dashboard = () => {
 
   return (
     <div className='flex min-w-full min-h-screen justify-center p-6 flex-col items-center'>
-      <AddForm />
+      <AddForm  addProduct = {addProduct}/>
       <Box sx={{ height: 600, width: '100%' , maxWidth: '1000px'}}>
       <DataGrid
         rows={products}
