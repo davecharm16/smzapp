@@ -26,7 +26,7 @@ export default function Home() {
     if (result?.error) {
       alert('Wrong Credentials')
     } else {
-      redirect('/dashboard');
+      window.location.href = "/dashboard";
     }
   }
 
