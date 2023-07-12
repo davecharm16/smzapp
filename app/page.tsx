@@ -20,7 +20,7 @@ export default function Home() {
   const handleSubmit = async (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(username,password);
-    const result = await signIn("credentials", { username: username, password: password, redirect: false})
+    const result = await signIn("credentials", { username: username, password: password})
 
     console.log(result)
     if (result?.error) {
